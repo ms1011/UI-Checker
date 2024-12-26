@@ -14,19 +14,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Python 스크립트 실행
+      # 2. Python 설치 및 라이브러리 설치
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 3. Python 스크립트 실행
       - name: Generate Selenium tests using OpenAI
         env:
-          AI_ML_API_KEY: ${{ secrets.AI_ML_API_KEY }}  # GitHub Secrets 주입
+          AI_ML_API_KEY: ${{ secrets.AI_ML_API_KEY }}
         run: |
           python scripts/generate_ui_tests.py
 
-      # 3. 테스트 실행
+      # 4. Maven 테스트 실행
       - name: Run Selenium UI tests
         run: |
           mvn test
 
-      # 4. PR 승인 여부 설정
+      # 5. PR 승인 여부 설정
       - name: Approve or Reject PR
         run: |
           if mvn test --batch-mode | grep -q "BUILD SUCCESS"; then
