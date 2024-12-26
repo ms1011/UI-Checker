@@ -36,7 +36,11 @@ def generate_selenium_test(html_file):
     response = api.chat.completions.create(
         # model="gpt-4",
         model="mistralai/Mistral-7B-Instruct-v0.2",
-        prompt=prompt,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
+        ],
+        # prompt=prompt,
         max_tokens=800
     )
     return response.choices[0].text.strip()
