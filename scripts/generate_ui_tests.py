@@ -41,7 +41,7 @@ def generate_selenium_test(html_file):
             {"role": "user", "content": prompt},
         ],
         # prompt=prompt,
-        max_tokens=800
+        max_tokens=256
     )
     return response.choices[0].text.strip()
 
