@@ -1,10 +1,14 @@
 import os
-import openai
+from openai import OpenAI
 from pathlib import Path
 
 # OpenAI API 키 설정
-openai.api_key = os.getenv("AI_ML_API_KEY")
-if not openai.api_key:
+base_url = "https://api.aimlapi.com/v1"
+api_key = os.getenv("AI_ML_API_KEY")
+
+api = OpenAI(base_url=base_url, api_key=api_key)
+
+if not api_key:
     raise ValueError("AI_ML_API_KEY is not set in the environment variables")
 
 # 프로젝트 폴더 경로
@@ -29,7 +33,7 @@ def generate_selenium_test(html_file):
     {html_content}
     """
 
-    response = openai.Completion.create(
+    response = api.chat.completions.create(
         # model="gpt-4",
         model="mistralai/Mistral-7B-Instruct-v0.2",
         prompt=prompt,
