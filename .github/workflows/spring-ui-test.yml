@@ -17,7 +17,7 @@ jobs:
       # 2. Python 스크립트 실행
       - name: Generate Selenium tests using OpenAI
         env:
-          OPENAI_API_KEY: ${{ secrets.AI_ML_API_KEY }}  # GitHub Secrets 주입
+          AI_ML_API_KEY: ${{ secrets.AI_ML_API_KEY }}  # GitHub Secrets 주입
         run: |
           python scripts/generate_ui_tests.py
 
