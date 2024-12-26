@@ -1,0 +1,34 @@
+name: Spring Boot Selenium UI Test
+
+on:
+  push:
+    branches:
+      - feature/*
+
+jobs:
+  generate-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. 프로젝트 스캔 및 OpenAI API 호출
+      - name: Generate Selenium tests using OpenAI
+        run: |
+          python scripts/generate_ui_tests.py
+
+      # 3. 테스트 실행
+      - name: Run Selenium UI tests
+        run: |
+          mvn test
+
+      # 4. PR 승인 여부 설정
+      - name: Approve or Reject PR
+        run: |
+          if mvn test --batch-mode | grep -q "BUILD SUCCESS"; then
+            echo "Tests passed. PR approved."
+          else
+            echo "Tests failed. PR rejected."
+            exit 1
